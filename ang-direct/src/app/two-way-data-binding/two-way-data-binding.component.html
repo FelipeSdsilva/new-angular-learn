@@ -1,0 +1,73 @@
+<section>
+    <mat-card appearance="outlined" style="margin: 20px;">
+        <mat-card-content>
+            <form>
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Name" [(ngModel)]="text1" name="anyName1">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Last name</mat-label>
+                    <input matInput placeholder="Last name" [(ngModel)]="text2" name="anyName2">
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            {{text1}}
+            {{text2}}
+        </mat-card-actions>
+    </mat-card>
+</section>
+
+<section>
+    <mat-card appearance="outlined" style="margin: 20px; border: solid;">
+        <mat-card-content>
+            <form>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" [(ngModel)]="name" name="name">
+                </mat-form-field>
+                <mat-form-field style="width: 40%; padding-left: 1%;">
+                    <mat-label>Last name</mat-label>
+                    <input matInput type="text" [(ngModel)]="lastName" name="lastName">
+                </mat-form-field>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" [(ngModel)]="employee.email" name="email">
+                </mat-form-field>
+                <mat-form-field style="width: 40%; padding-left: 1%;">
+                    <mat-label>Phone</mat-label>
+                    <input matInput type="phone" [(ngModel)]="employee.phone" name="phone">
+                </mat-form-field>
+                <mat-form-field style="width: 40%;">
+                    <mat-label>TIN</mat-label>
+                    <input matInput type="text" [(ngModel)]="employee.TIN" name="tin">
+                </mat-form-field>
+                <mat-form-field style="width: 40%; padding-left: 1%;">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" [(ngModel)]="employee.password" name="password">
+                </mat-form-field>
+                <mat-form-field style="width: 40%; padding-left: 0.1%;">
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword">
+                </mat-form-field>
+                <mat-form-field style="width: 20%; padding-left: 1%;">
+                    <mat-label>Number house</mat-label>
+                    <input matInput type="number" [(ngModel)]="employee.numberHouse" name="numberHouse">
+                </mat-form-field>
+                <mat-form-field style="width: 20%; margin-left: 1%;">
+                    <mat-label>Date of birth</mat-label>
+                    <input matInput type="date" [(ngModel)]="employee.dateOfBirth" name="dateOfBirth">
+                </mat-form-field>
+                <mat-form-field style="width: 20%; ">
+                    <mat-label>Hiredate</mat-label>
+                    <input matInput type="date" [(ngModel)]="employee.hireDate" name="hireDate">
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Save</button>
+            <button mat-button type="reset">Cancel</button>
+        </mat-card-actions>
+    </mat-card>
+</section>

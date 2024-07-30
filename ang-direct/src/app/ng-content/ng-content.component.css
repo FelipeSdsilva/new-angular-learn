@@ -1,0 +1,13 @@
+mat-card {
+    margin: 40px;
+    border: solid;
+    display: flex;
+    align-items: center;
+}
+
+img{
+    height: 200px;
+    width: 200px;
+}
+
+a{}

@@ -1,0 +1,32 @@
+<ul>
+    <li *ngFor="let name of names ">{{name}}</li>
+</ul>
+
+<mat-selection-list #namees>
+    <!-- @for (name of names; track name) { -->
+    <mat-list-option *ngFor="let name of names">{{name}}</mat-list-option>
+    <!-- } -->
+</mat-selection-list>
+
+<p>
+    Options selected: {{namees.selectedOptions.selected.length}}
+</p>
+
+<mat-list>
+    <h3 matSubHeader>Names</h3>
+    <mat-list-item *ngFor="let name of names">
+        <mat-icon matListIcon style="float: left; padding: 5px;">person</mat-icon>
+        <p matLine>{{name}}</p>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <h3 matSubHeader>Employees</h3>
+    <mat-list-item *ngFor="let employee of employees">
+        <mat-icon matListIcon style="float: left; padding: 5px;">badge</mat-icon>
+        <p matLine>
+            {{employee.id}} /
+            {{employee.name}} /
+            {{employee.email}}
+        </p>
+
+    </mat-list-item>
+</mat-list>

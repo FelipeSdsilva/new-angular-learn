@@ -1,0 +1,25 @@
+mat-form-field {
+    width: 100%;
+}
+
+mat-card {
+    margin: 40px;
+    border: solid;
+}
+
+button {
+    display: inline-flex;
+    width: 100%;
+}
+
+
+mat-list-item {
+    display: flex;
+    align-items: center;
+
+}
+
+h3 {
+    margin: 0 0;
+    font-weight: bolder;
+}

@@ -1,0 +1,44 @@
+<section>
+    <button mat-button color="primary" (click)="save()">
+        Save
+    </button>
+
+    <button mat-button color="warn" (click)="increment()">
+        {{btnName}}
+    </button>
+</section>
+
+<section>
+    <button mat-button color="primary" [disabled]="!btnEnable">My button 1</button>
+    <button mat-button color="warn" [disabled]="!btnEnable">My button 2</button>
+    <button mat-button color="warn" (click)="disable()">Disable</button>
+    <mat-progress-spinner color="primary" [mode]="spinnerMode" [value]="i">
+    </mat-progress-spinner>
+</section>
+
+
+<section>
+    <section>
+        <mat-checkbox color="primary" (change)="cbChange($event)">Enable/Disable</mat-checkbox>
+    </section>
+    <mat-form-field>
+        <mat-label>Select an option</mat-label>
+        <mat-select [disabled]="selectDisabled" (selectionChange)="selectionChange($event)">
+            <mat-option *ngFor="let food of foods" [value]="food">
+                {{ food }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</section>
+
+<section>
+    <mat-form-field appearance="fill">
+        <mat-label>Add food</mat-label>
+        <input matInput placeholder="Write your food" (input)="inputEvent($event)"
+            [value]="inputName">
+    </mat-form-field>
+</section>
+
+<p>
+    {{inputName}}
+</p>

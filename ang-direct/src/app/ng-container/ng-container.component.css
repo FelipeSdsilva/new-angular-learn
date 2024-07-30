@@ -1,0 +1,10 @@
+mat-card {
+    margin: 40px;
+    border: solid;
+}
+
+mat-list-item {
+    display: flex;
+    align-items: center;
+
+}

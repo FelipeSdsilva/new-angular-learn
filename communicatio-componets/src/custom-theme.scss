@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+
+@include mat.core();
+
+$communicatio-componets-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+:root {
+  @include mat.all-component-themes($communicatio-componets-theme);
+}

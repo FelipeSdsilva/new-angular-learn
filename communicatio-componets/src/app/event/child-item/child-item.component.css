@@ -1,0 +1,13 @@
+.horizontal-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.button-sum {
+    background-color: #1f26a5;
+}
+
+.button-sub {
+    background-color: #ff1c1c;
+}

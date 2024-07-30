@@ -1,0 +1,62 @@
+<mat-card>
+    <mat-card-title>
+        Select
+    </mat-card-title>
+    <mat-card-content>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [(ngModel)]="name" name="name">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput type="text" [(ngModel)]="address" name="lastName">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Phone</mat-label>
+            <input matInput type="phone" [(ngModel)]="phone" name="phone">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>City</mat-label>
+            <mat-select [(ngModel)]="city" name="city.name">
+                <mat-option *ngFor="let city of cities" [value]="city" name="city">
+                    {{ city.name }} - {{city.state}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Age</mat-label>
+            <input matInput type="number" [(ngModel)]="age" name="age">
+        </mat-form-field>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit" (click)="save($event)">Save</button>
+        <button mat-raised-button color="warn" (click)="cancel($event)">Cancel</button>
+    </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="clients.length > 0">
+    <mat-card-content>
+        <section>
+            <mat-list>
+                <h1 matHeader>Clients</h1>
+                <mat-divider></mat-divider>
+
+                <mat-list-item *ngFor="let client of clients" class="client-item">
+                    <mat-icon matListItemAvatar>person</mat-icon>
+                    <div class="client-info">
+                        <h3 matListItemLine>Id: {{client.id}}</h3>
+                        <h3 matListItemLine>Name: {{client.name}}</h3>
+                        <h3 matListItemLine>Phone: {{client.phone}}</h3>
+                        <h3 matListItemLine>Age: {{client.age}}</h3>
+                        <h3 matListItemLine>Address: {{client.address}}</h3>
+                        <h3 matListItemLine>City: {{client.city?.name || 'N/A'}}</h3>
+                    </div>
+                    <button matListItemMeta mat-icon-button style="color: #f44336;" color="warn"  (click)="deleteClient(client)" >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-list-item>
+            </mat-list>
+        </section>
+    </mat-card-content>
+</mat-card>

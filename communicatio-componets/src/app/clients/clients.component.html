@@ -1,0 +1,24 @@
+<mat-card>
+    <mat-card-content>
+        <section>
+            <mat-form-field>
+                <mat-label>First name</mat-label>
+                <input matInput type="text" name="firstName" [(ngModel)]="firstName">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Age</mat-label>
+                <input matInput type="number" name="age" [(ngModel)]="age" inputmode="numeric">
+            </mat-form-field>
+            <button mat-mini-fab color="primary" (click)="save()">
+                <mat-icon>check</mat-icon>
+            </button>
+        </section>
+        <section>
+            <app-item-client *ngFor="let client of clients let i = index"
+            [client]="client"
+            (updateClient)="updateClient($event, i)"
+            (removeClient)="removeClient(i)"
+            ></app-item-client>
+        </section>
+    </mat-card-content>
+</mat-card>
