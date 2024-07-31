@@ -5,6 +5,7 @@ import { EventComponent } from './event/event.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ParentChildComponent } from './parent-child/parent-child.component';
 import { OnChangesComponent } from './on-changes/on-changes.component';
+import { InterceptingComponent } from './intercepting/intercepting.component';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { OnChangesComponent } from './on-changes/on-changes.component';
     ClientsComponent,
     ParentChildComponent,
     OnChangesComponent,
+    InterceptingComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

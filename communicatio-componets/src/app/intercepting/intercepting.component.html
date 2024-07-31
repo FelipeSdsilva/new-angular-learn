@@ -1,1 +1,13 @@
-<p>intercepting works!</p>
+<mat-card>
+    <mat-card-content>
+        <section>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="name" type="text">
+            </mat-form-field>
+         </section>
+        <section>
+            <app-name name="{{name}}"></app-name>
+        </section>
+    </mat-card-content>
+</mat-card>
