@@ -1,0 +1,9 @@
+<mat-card>
+    <mat-card-content>
+        <!-- <p>Hours: {{round(((miliseconds / (1000 * 60 * 60)) % 60))}}</p>
+        <p>Minuts: {{round((miliseconds / (1000 * 60)) % 60)}}</p> -->
+        <p>Seconds: {{round((getMiliseconds() / 1000))}}</p>
+        <p>Miliseconds: {{ getMiliseconds() % 1000 }}</p>
+        <mat-progress-bar mode="indeterminate" *ngIf="running"></mat-progress-bar>
+    </mat-card-content>
+</mat-card>
