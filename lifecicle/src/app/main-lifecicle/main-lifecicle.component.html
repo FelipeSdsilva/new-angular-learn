@@ -1,0 +1,61 @@
+<mat-card>
+    <mat-card-title>
+        Clients
+    </mat-card-title>
+    <mat-card-content>
+        <section>
+
+            <mat-form-field class="form-field" style="width: 400px; padding-right: 20px;">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="name">
+            </mat-form-field>
+
+            <mat-form-field class="form-field" style="width: 100px; padding-right: 20px">
+                <mat-label>Age</mat-label>
+                <input matInput [(ngModel)]="age" type="number">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Favorite Food</mat-label>
+                <mat-select [(ngModel)]="food">
+                    <mat-option *ngFor="let foodOption of getFoods" [value]="foodOption">
+                        {{foodOption}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-icon-button color="primary" (click)="save()">
+                <mat-icon>check</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" (click)="genrateRandomNumber()">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </section>
+
+        <section>
+            <mat-list>
+                <mat-list-item *ngFor="let client of getClients let id=index">
+                    <mat-icon matListItemIcon>person</mat-icon>
+                    <div matListItemLine style="width: 100;">
+                        <app-child [name]="client.name" [age]="client.age" [food]="client.food" #child>
+                            {{random}}
+                        </app-child>
+                        <button MatListItemMeta mat-icon-button color="warn" (click)="delete(id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button MatListItemMeta mat-icon-button color="primary" (click)="edit(id)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <mat-chip-listbox>
+                            <mat-chip matListItemLine *ngFor="let event of child.events" [color]="event.color">
+                                {{event.name}}
+                            </mat-chip>
+                        </mat-chip-listbox>
+                    </div>
+
+                </mat-list-item>
+            </mat-list>
+        </section>
+    </mat-card-content>
+</mat-card>
