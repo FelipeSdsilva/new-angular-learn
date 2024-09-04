@@ -1,0 +1,27 @@
+.snack-ok {
+    background-color: darkseagreen;
+    color: black;
+}
+
+.snack-err {
+    background-color: pink;
+    color: black;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+}
+
+.product-item mat-icon {
+    margin-right: 8px;
+}
+
+.product-item p {
+    margin: 0;
+    flex: 1;
+}
+
+mat-card {
+    margin-top: 20px !important;
+}
