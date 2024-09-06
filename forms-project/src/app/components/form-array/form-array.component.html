@@ -1,0 +1,94 @@
+<div layout="column" layout-fill>
+    <div align="center" layout="row" layout-align="center center">
+
+        <mat-card class="mat-elevation-z8" flex="80" style="margin-top: 60px; width: 800px;">
+
+            <mat-card-title>New Client</mat-card-title>
+            <mat-card-subtitle>
+            </mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutAlign="stretch">
+
+                <form fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="clientForm">
+
+                    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between  begin">
+                        <mat-form-field fxFlex="45">
+                            <mat-label>First Name</mat-label>
+                            <input matInput type="text" formControlName="firstName">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="45">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput type="text" formControlName="lastName">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxLayoutAlign="begin">
+                        <h4>Address:</h4>
+                    </div>
+                    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between begin" formGroupName="address">
+                        <mat-form-field fxFlex="50">
+                            <mat-label>Street</mat-label>
+                            <input matInput type="text" formControlName="street">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="30">
+                            <mat-label>City</mat-label>
+                            <input matInput type="text" formControlName="city">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="10">
+                            <mat-label>State</mat-label>
+                            <input matInput type="text" formControlName="state">
+                        </mat-form-field>
+                    </div>
+
+                    <div fxFlex="100" fxLayoutAlign="begin">
+                        <h4>Telephones: </h4>
+                    </div>
+
+                    <div formArrayName="phones" fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start start"
+                        fxLayoutGap="20px">
+                        <!-- Itera sobre o FormArray "phones" -->
+                        <mat-form-field fxFlex="30" *ngFor="let phone of phones.controls; let i = index">
+                            <mat-label>Telephone</mat-label>
+                            <!-- Usa o i-ésimo formControlName dentro do FormArray -->
+                            <input matInput type="text" [formControlName]="i">
+                        </mat-form-field>
+                        <button mat-button type="button" color="primary" (click)="addPhone()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+
+                    <div fxFlex="100" fxLayoutAlign="begin">
+                        <h4>Children:</h4>
+                    </div>
+
+                    <div formArrayName="childrens" fxFlex="100" fxLayout="column" fxLayoutAlign="space-between start">
+                        <div *ngFor="let child of childrens.controls; let i = index" [formGroupName]="i" fxFlex="100"
+                            fxLayout="row" fxLayoutAlign="space-between begin">
+                            <mat-form-field fxFlex="75">
+                                <mat-label>Name</mat-label>
+                                <input matInput type="text" formControlName="name">
+                            </mat-form-field>
+                            <mat-form-field fxFlex="20">
+                                <mat-label>Age</mat-label>
+                                <input matInput type="text" formControlName="age">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div fxFlex="100" fxLayoutAlign="begin">
+                        <button mat-button color="primary" (click)="addChild()">
+                            <mat-icon>add</mat-icon> Add Child
+                        </button>
+                    </div>
+
+
+                    <button mat-button color="primary" type="submit">
+                        <mat-icon>done</mat-icon>Submit
+                    </button>
+                </form>
+            </mat-card-content>
+            <mat-card-footer>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+</div>
