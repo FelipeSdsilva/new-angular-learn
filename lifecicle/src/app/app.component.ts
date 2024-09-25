@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MaterialModules } from './material.modules';
-import { FormsModule } from '@angular/forms';
 import { MainLifecicleComponent } from "./main-lifecicle/main-lifecicle.component";
 import { CheckComponent } from "./check/check.component";
 
@@ -12,8 +11,8 @@ import { CheckComponent } from "./check/check.component";
     RouterOutlet,
     MaterialModules,
     MainLifecicleComponent,
-    CheckComponent
-],
+    CheckComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
