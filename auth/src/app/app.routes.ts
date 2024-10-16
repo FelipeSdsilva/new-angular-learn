@@ -9,5 +9,5 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     { path: 'products', component: ProductsComponent, canActivate: [ AuthGuard] },
-    { path: 'peoples', component: PersonsComponent }
+    { path: 'peoples', component: PersonsComponent, canActivate: [ AuthGuard] }
 ];
