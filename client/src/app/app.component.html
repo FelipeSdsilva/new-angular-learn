@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row" style="height: 100vh;">
+    <!-- Lista de mensagens -->
+    <div class="col-12 col-md-9" style="background-color: #ffffff; padding: 10px; overflow-y: auto;">
+      <ul class="list-unstyled chat-messages">
+        <li *ngFor="let m of messages" [class.msg-from-me]="m.from === nickname">
+          <h4><strong>{{ m.from }}</strong></h4>
+          <p>{{ m.message }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Campo de nickname e mensagem -->
+    <div class="col-12 col-md-3" style="background-color: gainsboro; padding: 10px;">
+      <div class="d-flex flex-column justify-content-around align-items-center">
+        <div class="w-100 mb-2">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Nickname" [(ngModel)]="nickname" class="form-control">
+          </mat-form-field>
+        </div>
+        <div class="w-100 mb-2">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Message" [(ngModel)]="message" (keyup.enter)="send()" class="form-control">
+          </mat-form-field>
+        </div>
+        <button mat-button color="primary" (click)="send()" class="btn btn-primary w-100">
+          <mat-icon>send</mat-icon> Send
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
