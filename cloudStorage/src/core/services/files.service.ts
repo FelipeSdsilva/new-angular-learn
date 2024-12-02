@@ -1,80 +1,127 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, orderBy, collectionData, deleteDoc, doc } from '@angular/fire/firestore';
+import { Storage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from '@angular/fire/storage';
+import { Observable } from 'rxjs';
+import { map, catchError, finalize } from 'rxjs/operators';
+import { FileEntry } from '../models/fileentry.model';
 import { MyFile } from '../models/myfile.model';
-import { Firestore } from 'firebase/firestore';
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilesService {
 
-  private filesCollection: CollectionReference<MyFile>;
+  private filesCollection;
 
-  constructor(
-    private storage: Firestore,
-    private afs: Firestore) {
-    this.filesCollection = afs.collection('myfiles', ref => ref.orderBy('date', 'desc'));
+  constructor(private firestore: Firestore, private storage: Storage) {
+    this.filesCollection = collection(this.firestore, 'myfiles');
   }
 
-  uploadFile(f: File) {
-    let path = `myfiles/${f.name}`;
-    let task = this.storage.upload(path, f);
-
-    task.snapshotChanges()
-      .subscribe((s) => console.log(s));
-  }
-
-  upload(f: FileEntry) {
-    let newfilename = `${(new Date()).getTime()}_${f.file.name}`;
-    let path = `myfiles/${newfilename}`;
-    f.task = this.storage.upload(path, f.file);
-    f.state = f.task.snapshotChanges()
-      .pipe(
-        map((s) => f.task.task.snapshot.state),
-        catchError(s => {
-          return of(f.task.task.snapshot.state)
-        })
-      )
-    this.fillAttributes(f);
-    f.task.snapshotChanges().pipe(
-      finalize(() => {
-        if (f.task.task.snapshot.state == "success") {
-          this.filesCollection.add({
-            filename: f.file.name,
-            path: path,
-            date: (new Date()).getTime(),
-            size: f.file.size
-          });
+  uploadFile(file: File): Observable<number> {
+    const path = `myfiles/${file.name}`;
+    const storageRef = ref(this.storage, path);
+    const task = uploadBytesResumable(storageRef, file);
+  
+    return new Observable<number>((observer) => {
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          // Calcula o progresso do upload em porcentagem
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          observer.next(progress);
+        },
+        (error) => {
+          // Emite erro caso ocorra falha
+          observer.error(error);
+        },
+        async () => {
+          // Completa o observable ao término do upload
+          observer.complete();
+          const downloadURL = await getDownloadURL(storageRef);
+          console.log('File available at', downloadURL);
         }
-      })
-    )
-      .subscribe();
+      );
+    });
+  }
+  
+  upload(fileEntry: FileEntry): void {
+    const newFileName = `${new Date().getTime()}_${fileEntry.file.name}`;
+    const path = `myfiles/${newFileName}`;
+    const storageRef = ref(this.storage, path);
+    const task = uploadBytesResumable(storageRef, fileEntry.file);
+
+    fileEntry.state = new Observable<string>((observer) => {
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          observer.next(snapshot.state);
+        },
+        (error) => {
+          observer.error(error);
+        },
+        () => {
+          observer.complete();
+        }
+      );
+    });
+
+    this.fillAttributes(fileEntry, task);
+
+    task.on(
+      'state_changed',
+      null,
+      null,
+      async () => {
+        if (task.snapshot.state === 'success') {
+          const fileData: MyFile = {
+            filename: fileEntry.file.name,
+            path,
+            date: new Date().getTime(),
+            size: fileEntry.file.size,
+          };
+          await addDoc(this.filesCollection, fileData);
+        }
+      }
+    );
   }
 
-  fillAttributes(f: FileEntry) {
-    f.percentage = f.task.percentageChanges();
-    f.uploading = f.state.pipe(map((s) => s == "running"));
-    f.finished = from(f.task).pipe(map((s) => s.state == "success"));
-    f.paused = f.state.pipe(map((s) => s == "paused"));
-    f.error = f.state.pipe(map((s) => s == "error"));
-    f.canceled = f.state.pipe(map((s) => s == "canceled"));
-    f.bytesuploaded = f.task.snapshotChanges().pipe((map(s => s.bytesTransferred)));
+  fillAttributes(fileEntry: FileEntry, task: any): void {
+    fileEntry.percentage = new Observable<number>((observer) => {
+      task.on('state_changed', (snapshot: any) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        observer.next(progress);
+      });
+    });
+
+    fileEntry.uploading = fileEntry.state.pipe(map((state) => state === 'running'));
+    fileEntry.finished = fileEntry.state.pipe(map((state) => state === 'success'));
+    fileEntry.paused = fileEntry.state.pipe(map((state) => state === 'paused'));
+    fileEntry.error = fileEntry.state.pipe(map((state) => state === 'error'));
+    fileEntry.canceled = fileEntry.state.pipe(map((state) => state === 'canceled'));
+    fileEntry.bytesUploaded = new Observable<number>((observer) => {
+      task.on('state_changed', (snapshot: any) => {
+        observer.next(snapshot.bytesTransferred);
+      });
+    });
   }
 
   getFiles(): Observable<MyFile[]> {
-    return this.filesCollection.snapshotChanges()
-      .pipe(map((actions) => {
-        return actions.map(a => {
-          const file: MyFile = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          const url = this.storage.ref(file.path).getDownloadURL();
-          return { id, ...file, url };
+    const filesQuery = query(this.filesCollection, orderBy('date', 'desc'));
+    return collectionData(filesQuery, { idField: 'id' }).pipe(
+      map((files: MyFile[]) =>
+        files.map(async (file) => {
+          const url = await getDownloadURL(ref(this.storage, file.path));
+          return { ...file, url };
         })
-      }))
+      )
+    ) as Observable<MyFile[]>;
   }
 
-  deleteFile(f: MyFile) {
-    this.storage.ref(f.path).delete();
-    this.filesCollection.doc(f.id).delete();
+  async deleteFile(file: MyFile): Promise<void> {
+    const fileRef = ref(this.storage, file.path);
+    await deleteObject(fileRef);
+    const docRef = doc(this.firestore, `myfiles/${file.id}`);
+    await deleteDoc(docRef);
   }
 }

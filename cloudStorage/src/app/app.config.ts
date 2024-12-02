@@ -18,7 +18,11 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimationsAsync(),
     provideFirebaseApp(() =>
-      initializeApp(environment.firebaseConfig)), provideFirestore(() => getFirestore()), provideDatabase(() => getDatabase()), provideFunctions(() => getFunctions()), provideStorage(() => getStorage()),
+      initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    provideDatabase(() => getDatabase()),
+    provideFunctions(() => getFunctions()),
+    provideStorage(() => getStorage()),
   ],
 
 };

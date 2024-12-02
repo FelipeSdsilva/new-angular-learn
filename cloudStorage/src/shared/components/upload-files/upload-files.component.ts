@@ -3,13 +3,14 @@ import { MaterialModules } from '../../../core/modules/angular-material/material
 import { FilesService } from '../../../core/services/files.service';
 import { DropzoneComponent } from "./dropzone/dropzone.component";
 import { FileEntry } from '../../../core/models/fileentry.model';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-upload-files',
   standalone: true,
   imports: [MaterialModules, DropzoneComponent],
   templateUrl: './upload-files.component.html',
-  styleUrl: './upload-files.component.css'
+  styleUrls: ['./upload-files.component.css'] // Corrigido 'styleUrl' para 'styleUrls'
 })
 export class UploadFilesComponent implements OnInit {
 
@@ -17,28 +18,57 @@ export class UploadFilesComponent implements OnInit {
 
   constructor(private filesService: FilesService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit(): void { }
 
-  onDropFiles(files: FileList) {
-    this.files.splice(0, this.files.length);
+  onDropFiles(files: FileList): void {
+    this.files = []; // Reseta a lista
     for (let i = 0; i < files.length; i++) {
-      this.files.push({
-        file: files.item(i), percentage: null, uploading: null,
-        bytesuploaded: null, canceled: null, error: null, finished: null,
-        paused: null, state: null, task: null
-      });
+      const file = files.item(i);
+      if (file) {
+        this.files.push({
+          file,
+          task: undefined,
+          percentage: new Observable(),
+          uploading: new Observable(),
+          finished: new Observable(),
+          paused: new Observable(),
+          error: new Observable(),
+          canceled: new Observable(),
+          bytesUploaded: new Observable(),
+          state: new Observable(),
+        });
+      }
     }
   }
 
-  removeFileFromList(i) {
-    this.files.splice(i, 1);
+  removeFileFromList(index: number): void {
+    this.files.splice(index, 1);
   }
 
-  uploadAll() {
-    for (let i = 0; i < this.files.length; i++)
-      this.filesService.upload(this.files[i]);
-  }
+  uploadAll(): void {
+    this.files.forEach((fileEntry, index) => {
+      const upload$ = this.filesService.uploadFile(fileEntry.file);
 
+      fileEntry.uploading = upload$.pipe(map(progress => progress < 100));
+      fileEntry.percentage = upload$;
+
+      upload$.subscribe({
+        next: (progress) => console.log(`File ${fileEntry.file.name} is ${progress}% uploaded`),
+        complete: () => {
+          console.log(`File ${fileEntry.file.name} uploaded successfully`);
+          fileEntry.finished = new Observable((observer) => {
+            observer.next(true);
+            observer.complete();
+          });
+        },
+        error: (error) => {
+          console.error(`Error uploading file ${fileEntry.file.name}:`, error);
+          fileEntry.error = new Observable((observer) => {
+            observer.next(true);
+            observer.complete();
+          });
+        },
+      });
+    });
+  }
 }
-
