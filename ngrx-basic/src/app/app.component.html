@@ -1,0 +1,7 @@
+<div class="container-fluid d-flex flex-column justify-content-start align-items-center">
+  <div class="d-flex flex-column justify-content-start align-items-stretch flex-grow-0" style="flex-basis: 70%;">
+    <app-person class="container-fluid" *ngFor="let person of peoples$ | async" [person]="person" (delete)="delete($event)" (update)="update($event)" />
+  </div>
+
+  <button pButton pRipple label="NEW" class="button-action-new p-button-success" (click)="addNew()"></button>
+</div>
