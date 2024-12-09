@@ -1,5 +1,5 @@
 export interface User {
-    id: string,
+    id?: string,
     firstname: string,
     lastname: string,
     address: string,
@@ -7,5 +7,6 @@ export interface User {
     state: string,
     phone: string,
     email: string,
+    mobilephone: string,
     password?: string
 }
